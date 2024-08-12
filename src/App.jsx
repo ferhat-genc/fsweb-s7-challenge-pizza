@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import { Switch } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import HomePage from "./companent/HomePage";
 import OrderPage from "./companent/OrderPage";
 import OrderStatusPage from "./companent/OrderStatusPage";
