@@ -1,7 +1,15 @@
-export default function OrderPage() {
+import Header from "./Header";
+import OrderForm from "./OrderForm";
+
+export default function OrderPage(props) {
 	// hooks
 
 	// handles
 
-	return <p>Order Page</p>;
+	return (
+		<>
+			<Header />
+			<OrderForm />
+		</>
+	);
 }

@@ -5,8 +5,24 @@ import HomePage from "./companent/HomePage";
 import OrderPage from "./companent/OrderPage";
 import OrderStatusPage from "./companent/OrderStatusPage";
 
+const initalOrder = {
+	pName: "", // adı
+	pPrice: 0, // fiyatı
+	pRating: "", // puanı
+	pQuantity: 0, // satış sayısı
+	pDescription: "", // açıklaması
+	pSize: [], // boyutu
+	pThickness: [], // hamur kalınlığı
+	pMaterials: [], // ek malzemeler
+	pOrderNote: "", // sipariş notu
+	pPiece: 0, // sipariş edilen ürün adedi
+	pAdditionalFees: 0, // ekstra seçim ücretleri
+	pTotalOrderPrice: 0, // toplam sipariş tutarı
+};
+
 export default function App() {
 	// hooks
+	const [order, setOrder] = useState(initalOrder);
 
 	// handle functions
 
@@ -14,10 +30,10 @@ export default function App() {
 		<>
 			<Switch>
 				<Route path="/" exact>
-					<HomePage />
+					<HomePage order={order} setOrder={setOrder} />
 				</Route>
-				<Route path="/orderpage">
-					<OrderPage />
+				<Route path="/order">
+					<OrderPage order={order} setOrder={setOrder} />
 				</Route>
 				<Route path="/orderstatus">
 					<OrderStatusPage />
