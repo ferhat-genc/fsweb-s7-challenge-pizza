@@ -5,7 +5,7 @@ export default function OrderForm() {
 		<>
 			<Form>
 				<h2>Ürün adı Lorem, ipsum dolor.</h2>
-				<div>
+				<div className="form-row">
 					<h3>85 TL</h3>
 					<span>4.9</span>
 					<span>(250)</span>
@@ -16,8 +16,8 @@ export default function OrderForm() {
 					laudantium saepe quam repellat explicabo itaque accusamus sit maxime
 					ad voluptatem temporibus fuga.
 				</p>
-				<div>
-					<div>
+				<div className="form-row">
+					<div className="form-column">
 						<p>
 							Boyut seç <span>*</span>
 						</p>
@@ -31,7 +31,7 @@ export default function OrderForm() {
 							<input type="radio" name="pSize" /> Büyük
 						</label>
 					</div>
-					<div>
+					<div className="form-column">
 						<p>
 							Hamur Seç <span>*</span>
 						</p>
@@ -43,7 +43,7 @@ export default function OrderForm() {
 						</select>
 					</div>
 				</div>
-				<div>
+				<div className="form-column">
 					<p>Ek Malzemeler</p>
 					<div>
 						<p>NOT bıraya checkbox lar gelecek</p>
@@ -56,13 +56,13 @@ export default function OrderForm() {
 						placeholder="Siparişine eklemek istediğin bir not var mı?"
 					/>
 				</div>
-				<div>
+				<div className="form-row">
 					<div>
 						<button>-</button>
 						<input type="number" />
 						<button>+</button>
 					</div>
-					<div>
+					<div className="form-column">
 						<p>Sipariş Toplamı</p>
 						<div>
 							<span>Seçimler</span>
