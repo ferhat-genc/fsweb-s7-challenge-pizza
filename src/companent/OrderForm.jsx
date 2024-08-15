@@ -1,79 +1,261 @@
+import { useEffect, useState } from "react";
 import { Form } from "reactstrap";
 
+//
+//	state objesinin keylerine denk gelen elementleri name attribute leri ile eşleştirme yapmalıyım
+//  daha sonra objeyi props tan descructer ederek fonksiyonlar içinde kullanmaya başlamalıyım
+//  aşağıdaki elementleri control input'a dönüştürmeliyim
+//
+const initalOrder = {};
+
 export default function OrderForm() {
+	const [order, setOrder] = useState({
+		pName: "Ürün adı Lorem, ipsum dolor", // adı
+		pPrice: 85, // fiyatı
+		pRating: 4.9, // puanı
+		pQuantity: 215, // satış sayısı
+		pDescription:
+			"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis, illum incidunt nemo molestiae obcaecati dicta repellat dolor, quasi tempora officiis exercitationem molestias.", // açıklaması
+		pSize: "", // boyutu
+		pThickness: [], // hamur kalınlığı
+		pMaterials: [], // ek malzemeler
+		pOrderNote: "", // sipariş notu
+		pPiece: 1, // sipariş edilen ürün adedi
+		pAddItionalFees: 0, // ekstra seçim ücretleri
+		pTotalOrderPrice: 85, // toplam sipariş tutarı
+	});
+
+	function handleChange(event) {
+		let { value, name, type, checked } = event.target;
+
+		// label içindeki inputların temsil ettiği değeri bu şekilde alıyorum
+		const deger = event.target.parentElement.innerText;
+
+		// değer checkbox tan geliyor ise value değerini bu şekilde ayarla
+		value = type === "checkbox" ? deger : value;
+
+		// değer radio butonlardan geliyor ise size değerini buradan güncelle
+		if (name === "pSize") {
+			setOrder({ ...order, pSize: deger });
+		}
+
+		// değer ordernote inputundan geliyor ise
+		if (name === "pOrderNote") {
+			setOrder({ ...order, pOrderNote: value });
+		}
+
+		// ürün adedi değişiyor ise
+		if (name === "pPiece") {
+			setOrder({ ...order, pPiece: Number(value) });
+		}
+
+		// değer checkbox lardan geliyor ise
+		if (type === "checkbox") {
+			if (order.pMaterials.find((mat) => mat === deger)) {
+				const newMaterials = order.pMaterials.filter((mat) => mat !== deger);
+				const ekUcretler = order.pAddItionalFees - 10;
+				setOrder({
+					...order,
+					pAddItionalFees: ekUcretler,
+					pMaterials: newMaterials,
+				});
+			} else {
+				const newMaterials = [...order.pMaterials, deger];
+				const ekUcretler = order.pAddItionalFees + 10;
+				setOrder({
+					...order,
+					pAddItionalFees: ekUcretler,
+					pMaterials: newMaterials,
+				});
+			}
+		}
+
+		// değer pThickness select elementinden geliyorsa
+		if (name === "pThickness") {
+			setOrder({ ...order, pThickness: value });
+		}
+	}
+
+	useEffect(() => {
+		// sipariş toplamı değeri
+		let toplam =
+			order.pAddItionalFees * order.pPiece + order.pPrice * order.pPiece;
+		setOrder({ ...order, pTotalOrderPrice: toplam });
+	}, [order.pPiece, order.pAddItionalFees]);
+
+	function handleSubmit(event) {
+		event.preventDefault();
+	}
+
 	return (
 		<>
-			<Form>
-				<h2>Ürün adı Lorem, ipsum dolor.</h2>
+			<Form onSubmit={handleSubmit}>
+				<h2>{order.pName}</h2>
 				<div className="form-row">
-					<h3>85 TL</h3>
-					<span>4.9</span>
-					<span>(250)</span>
+					<h3 name="pPrice">{order.pPrice} TL</h3>
+					<span name="pRating">{order.pRating}</span>
+					<span name="pQuantity">{order.pQuantity}</span>
 				</div>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					distinctio recusandae delectus adipisci, ut nam officia architecto
-					laudantium saepe quam repellat explicabo itaque accusamus sit maxime
-					ad voluptatem temporibus fuga.
-				</p>
+
+				<p name="pDescription">{order.pDescription}</p>
 				<div className="form-row">
 					<div className="form-column">
 						<p>
 							Boyut seç <span>*</span>
 						</p>
 						<label>
-							<input type="radio" name="pSize" /> Küçük
+							<input type="radio" name="pSize" onChange={handleChange} />
+							Küçük
 						</label>
 						<label>
-							<input type="radio" name="pSize" /> Orta
+							<input type="radio" name="pSize" onChange={handleChange} />
+							Orta
 						</label>
 						<label>
-							<input type="radio" name="pSize" /> Büyük
+							<input type="radio" name="pSize" onChange={handleChange} />
+							Büyük
 						</label>
 					</div>
 					<div className="form-column">
 						<p>
 							Hamur Seç <span>*</span>
 						</p>
-						<select name="pThickness" id="pThickness">
-							<option value="">Hamur Kalınlığı</option>
-							<option value="ince">İnce</option>
-							<option value="orta">Orta</option>
-							<option value="kalin">Kalın</option>
+						{/* select i valide edemedim */}
+						<select name="pThickness" id="pThickness" onChange={handleChange}>
+							<option value="" hidden>
+								Hamur Kalınlığı
+							</option>
+							<option value="İnce">İnce</option>
+							<option value="Orta">Orta</option>
+							<option value="Kalın">Kalın</option>
 						</select>
 					</div>
 				</div>
 				<div className="form-column">
 					<p>Ek Malzemeler</p>
-					<div>
-						<p>NOT bıraya checkbox lar gelecek</p>
+					<div className="form-matarial">
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={!!order.pMaterials.find((mat) => mat === "Pepperoni")}
+							/>
+							Pepperoni
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={!!order.pMaterials.find((mat) => mat === "Sosis")}
+							/>
+							Sosis
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={
+									!!order.pMaterials.find((mat) => mat === "Kanada Jambonu")
+								}
+							/>
+							Kanada Jambonu
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={
+									!!order.pMaterials.find((mat) => mat === "Tavuk Izgara")
+								}
+							/>
+							Tavuk Izgara
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={!!order.pMaterials.find((mat) => mat === "Soğan")}
+							/>
+							Soğan
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={!!order.pMaterials.find((mat) => mat === "Domates")}
+							/>
+							Domates
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={!!order.pMaterials.find((mat) => mat === "Mısır")}
+							/>
+							Mısır
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={!!order.pMaterials.find((mat) => mat === "Sucuk")}
+							/>
+							Sucuk
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={!!order.pMaterials.find((mat) => mat === "Ananas")}
+							/>
+							Ananas
+						</label>
+						<label>
+							<input
+								type="checkbox"
+								onChange={handleChange}
+								checked={!!order.pMaterials.find((mat) => mat === "Kabak")}
+							/>
+							Kabak
+						</label>
 					</div>
 				</div>
 				<div>
 					<p>Sipariş Notu</p>
 					<input
+						name="pOrderNote"
 						type="text"
 						placeholder="Siparişine eklemek istediğin bir not var mı?"
+						onChange={handleChange}
+						value={order.pOrderNote}
 					/>
 				</div>
+
+				<div className="form-column siparis-toplami">
+					<p>Sipariş Toplamı</p>
+					<div>
+						<span>Seçimler:</span>
+						{"  "}
+						<span>{order.pAddItionalFees * order.pPiece} TL</span>
+					</div>
+					<div>
+						<span>Toplam:</span>
+						{"  "}
+						<span>{order.pTotalOrderPrice} TL</span>
+					</div>
+				</div>
+
 				<div className="form-row">
 					<div>
-						<button>-</button>
-						<input type="number" />
-						<button>+</button>
+						<input
+							name="pPiece"
+							type="number"
+							onChange={handleChange}
+							value={order.pPiece}
+							min={1}
+						/>
 					</div>
-					<div className="form-column">
-						<p>Sipariş Toplamı</p>
-						<div>
-							<span>Seçimler</span>
-							<span>0 TL</span>
-						</div>
-						<div>
-							<span>Toplam</span>
-							<span>0 TL</span>
-						</div>
-						<button>Sipariş Ver</button>
-					</div>
+					<button type="submit">Sipariş Ver</button>
 				</div>
 			</Form>
 		</>

@@ -1,7 +1,19 @@
 * {
 	margin: 0;
 	padding: 0;
+	box-sizing: border-box;
 }
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	padding: 0;
+	margin: 0;
+}
+
 header {
 	display: flex;
 	flex-direction: column;
@@ -21,6 +33,7 @@ form {
 	width: 540px;
 	margin: 0 auto;
 	gap: 1rem;
+	margin-bottom: 5rem;
 }
 
 .form-row {
@@ -32,4 +45,22 @@ form {
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
+}
+
+.form-matarial {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 0.5rem;
+}
+
+.form-matarial label {
+	width: 46%;
+}
+.form-matarial label input {
+	width: 0.8rem;
+	height: 0.8rem;
+}
+
+.siparis-toplami {
+	border: 1px solid gray;
 }
