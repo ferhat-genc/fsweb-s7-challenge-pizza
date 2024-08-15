@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Form } from "reactstrap";
 
 //
@@ -10,6 +11,8 @@ const initalOrder = {};
 
 export default function OrderForm() {
 	const [isValid, setIsValid] = useState(false);
+
+	const history = useHistory();
 
 	const [order, setOrder] = useState({
 		pName: "Ürün adı Lorem, ipsum dolor", // adı
@@ -108,12 +111,14 @@ export default function OrderForm() {
 
 	function handleSubmit(event) {
 		event.preventDefault();
+		history.push("/orderstatus");
 	}
 
 	return (
 		<>
 			<Form onSubmit={handleSubmit}>
 				<h2>{order.pName}</h2>
+
 				<div className="form-row">
 					<h3 name="pPrice">{order.pPrice} TL</h3>
 					<span name="pRating">{order.pRating}</span>
@@ -138,7 +143,7 @@ export default function OrderForm() {
 							Hamur Seç
 							{!isValid && <span className="valid">*</span>}
 						</p>
-						{/* select i valide edemedim */}
+
 						<select name="pThickness" id="pThickness" onChange={handleChange}>
 							<option value="" hidden>
 								Hamur Kalınlığı

@@ -3,16 +3,6 @@
 	padding: 0;
 	box-sizing: border-box;
 }
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	padding: 0;
-	margin: 0;
-}
 
 header {
 	display: flex;
@@ -66,4 +56,34 @@ form {
 }
 .valid {
 	color: red;
+}
+.home-container {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #ce2829;
+}
+.home-button {
+	color: #000000;
+	background-color: #fdc913;
+	padding: 1rem 3rem;
+	border-radius: 0.5rem;
+	-webkit-border-radius: 0.5rem;
+	-moz-border-radius: 0.5rem;
+	-ms-border-radius: 0.5rem;
+	-o-border-radius: 0.5rem;
+}
+.order-status-container {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #ce2829;
+}
+
+.order-status-container h2 {
+	color: white;
 }

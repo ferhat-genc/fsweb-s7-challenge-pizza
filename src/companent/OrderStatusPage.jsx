@@ -3,5 +3,9 @@ export default function OrderStatusPage() {
 
 	// handles
 
-	return <p>Order Status Page</p>;
+	return (
+		<div className="order-status-container">
+			<h2>Sipariş Oluşturuldu!</h2>
+		</div>
+	);
 }
