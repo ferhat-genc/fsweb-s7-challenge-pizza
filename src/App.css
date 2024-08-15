@@ -64,3 +64,6 @@ form {
 .siparis-toplami {
 	border: 1px solid gray;
 }
+.valid {
+	color: red;
+}

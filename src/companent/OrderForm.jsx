@@ -9,6 +9,8 @@ import { Form } from "reactstrap";
 const initalOrder = {};
 
 export default function OrderForm() {
+	const [isValid, setIsValid] = useState(false);
+
 	const [order, setOrder] = useState({
 		pName: "Ürün adı Lorem, ipsum dolor", // adı
 		pPrice: 85, // fiyatı
@@ -17,13 +19,28 @@ export default function OrderForm() {
 		pDescription:
 			"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis, illum incidunt nemo molestiae obcaecati dicta repellat dolor, quasi tempora officiis exercitationem molestias.", // açıklaması
 		pSize: "", // boyutu
-		pThickness: [], // hamur kalınlığı
+		pThickness: "", // hamur kalınlığı
 		pMaterials: [], // ek malzemeler
 		pOrderNote: "", // sipariş notu
 		pPiece: 1, // sipariş edilen ürün adedi
 		pAddItionalFees: 0, // ekstra seçim ücretleri
 		pTotalOrderPrice: 85, // toplam sipariş tutarı
 	});
+
+	const ekMalzemeler = [
+		"Pepperoni",
+		"Sosis",
+		"Kanada Jambonu",
+		"Tavuk Izgara",
+		"Soğan",
+		"Domates",
+		"Mısır",
+		"Sucuk",
+		"Ananas",
+		"Kabak",
+	];
+
+	const hamurKalinligi = ["Küçük", "Orta", "Büyük"];
 
 	function handleChange(event) {
 		let { value, name, type, checked } = event.target;
@@ -81,7 +98,13 @@ export default function OrderForm() {
 		let toplam =
 			order.pAddItionalFees * order.pPiece + order.pPrice * order.pPiece;
 		setOrder({ ...order, pTotalOrderPrice: toplam });
-	}, [order.pPiece, order.pAddItionalFees]);
+
+		if (order.pSize !== "" && order.pThickness !== "") {
+			setIsValid(true);
+		} else {
+			setIsValid(false);
+		}
+	}, [order.pPiece, order.pAddItionalFees, order.pThickness, order.pSize]);
 
 	function handleSubmit(event) {
 		event.preventDefault();
@@ -100,25 +123,20 @@ export default function OrderForm() {
 				<p name="pDescription">{order.pDescription}</p>
 				<div className="form-row">
 					<div className="form-column">
-						<p>
-							Boyut seç <span>*</span>
-						</p>
-						<label>
-							<input type="radio" name="pSize" onChange={handleChange} />
-							Küçük
-						</label>
-						<label>
-							<input type="radio" name="pSize" onChange={handleChange} />
-							Orta
-						</label>
-						<label>
-							<input type="radio" name="pSize" onChange={handleChange} />
-							Büyük
-						</label>
+						<p>Boyut seç {!isValid && <span className="valid">*</span>}</p>
+						{hamurKalinligi.map((byt) => {
+							return (
+								<label>
+									<input type="radio" name="pSize" onChange={handleChange} />
+									{byt}
+								</label>
+							);
+						})}
 					</div>
 					<div className="form-column">
 						<p>
-							Hamur Seç <span>*</span>
+							Hamur Seç
+							{!isValid && <span className="valid">*</span>}
 						</p>
 						{/* select i valide edemedim */}
 						<select name="pThickness" id="pThickness" onChange={handleChange}>
@@ -134,90 +152,18 @@ export default function OrderForm() {
 				<div className="form-column">
 					<p>Ek Malzemeler</p>
 					<div className="form-matarial">
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={!!order.pMaterials.find((mat) => mat === "Pepperoni")}
-							/>
-							Pepperoni
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={!!order.pMaterials.find((mat) => mat === "Sosis")}
-							/>
-							Sosis
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={
-									!!order.pMaterials.find((mat) => mat === "Kanada Jambonu")
-								}
-							/>
-							Kanada Jambonu
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={
-									!!order.pMaterials.find((mat) => mat === "Tavuk Izgara")
-								}
-							/>
-							Tavuk Izgara
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={!!order.pMaterials.find((mat) => mat === "Soğan")}
-							/>
-							Soğan
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={!!order.pMaterials.find((mat) => mat === "Domates")}
-							/>
-							Domates
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={!!order.pMaterials.find((mat) => mat === "Mısır")}
-							/>
-							Mısır
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={!!order.pMaterials.find((mat) => mat === "Sucuk")}
-							/>
-							Sucuk
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={!!order.pMaterials.find((mat) => mat === "Ananas")}
-							/>
-							Ananas
-						</label>
-						<label>
-							<input
-								type="checkbox"
-								onChange={handleChange}
-								checked={!!order.pMaterials.find((mat) => mat === "Kabak")}
-							/>
-							Kabak
-						</label>
+						{ekMalzemeler.map((mlzm) => {
+							return (
+								<label>
+									<input
+										type="checkbox"
+										onChange={handleChange}
+										checked={!!order.pMaterials.find((mat) => mat === mlzm)}
+									/>
+									{mlzm}
+								</label>
+							);
+						})}
 					</div>
 				</div>
 				<div>
@@ -255,7 +201,9 @@ export default function OrderForm() {
 							min={1}
 						/>
 					</div>
-					<button type="submit">Sipariş Ver</button>
+					<button type="submit" disabled={!isValid}>
+						Sipariş Ver
+					</button>
 				</div>
 			</Form>
 		</>
